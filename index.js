@@ -1,4 +1,9 @@
 require('dotenv').config();
+
+// Listen on a specific host via the HOST environment variable
+var host = process.env.HOST || '0.0.0.0';
+// Listen on a specific port via the PORT environment variable
+var port = process.env.PORT || 8080;
 const EXPRESS = require('express');
 const CORS = require('cors');
 const MONGOOSE = require('mongoose');
@@ -21,7 +26,7 @@ const start = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true
     })
-    APP.listen(PORT, () => console.log(`Server started on port ${PORT}`))
+    APP.listen(port, host, () => console.log(`Server started on port ${PORT}`))
   } catch (e){
     console.log(e);
   }
