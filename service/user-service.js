@@ -7,17 +7,21 @@ const UserDto = require('../dtos/user-dto');
 const ApiError = require('../exceptions/api-error')
 
 class UserService {
-  async registration(email, password) {
-    const candidate = await UserModel.findOne({email})
-    if (candidate) {
+  async registration(username, email, password) {
+    const UsernameCandidate = await UserModel.findOne({username})
+    if (UsernameCandidate) {
+      throw ApiError.BadRequest(`Пользователь с именем ${username} уже существует`);
+    }
+    const PasswordCandidate = await UserModel.findOne({email})
+    if (PasswordCandidate) {
       throw ApiError.BadRequest(`Пользователь с почтовым адресом ${email} уже существует`);
     }
     const hashPassword = await BCRYPT.hash(password, 3); // пароль + соль, что такое соль?
     const activationLink = UUID.v4();
-    const user = await UserModel.create({email, password: hashPassword, activationLink});
+    const user = await UserModel.create({username, email, password: hashPassword, activationLink});
     // await MAIL_SERVICE.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);
 
-    const userDto = new UserDto(user); // id, email, isActivated
+    const userDto = new UserDto(user); // id, username, email, isActivated
     const tokens = tokenService.generateTokens({...userDto});
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
 
@@ -33,9 +37,13 @@ class UserService {
     await user.save();
   }
 
-  async login (email, password) {
-    const user = await UserModel.findOne({email})
+  async login (username, email, password) {
+    const user = await UserModel.findOne({username})
     if (!user) {
+      throw ApiError.BadRequest('Пользователь с таким именем не найден');
+    }
+    const pass = await UserModel.findOne({email})
+    if (!pass) {
       throw ApiError.BadRequest('Пользователь с таким email не найден');
     }
     const isPassEquals = await BCRYPT.compare(password, user.password);
