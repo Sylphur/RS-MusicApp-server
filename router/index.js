@@ -6,9 +6,11 @@ const {body} = require('express-validator');
 const authMiddleware = require('../middlewares/auth-middleware');
 
 router.post('/registration',
+body('username').isLength({min: 6, max: 16}),
 body('email').isEmail(),
-body('password').isLength({min: 6, max: 16}), //валидация по длине пароля
+body('password').isLength({min: 6, max: 16}),
 USER_CONTROLLER.registration);
+
 router.post('/login', USER_CONTROLLER.login);
 router.post('/logout', USER_CONTROLLER.logout);
 router.get('/activate/:link', USER_CONTROLLER.activate);
