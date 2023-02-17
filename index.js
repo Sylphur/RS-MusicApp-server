@@ -16,7 +16,10 @@ const APP = EXPRESS();
 
 APP.use(EXPRESS.json());
 APP.use(cookieParser());
-APP.use(CORS());
+APP.use(CORS({
+  credentials: true,
+  origin: process.env.CLIENT_URL
+}));
 APP.use('/api', ROUTER); 
 APP.use(errorMiddleware) //всегда последним!!
 
