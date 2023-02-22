@@ -18,7 +18,7 @@ APP.use(EXPRESS.json());
 APP.use(cookieParser());
 APP.use(CORS({
   credentials: true,
-  origin: process.env.CLIENT_URL
+  origin: true
 }));
 APP.use('/api', ROUTER); 
 APP.use(errorMiddleware) //всегда последним!!
