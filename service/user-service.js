@@ -8,20 +8,17 @@ const ApiError = require('../exceptions/api-error')
 
 class UserService {
   async registration(username, email, password) {
-    const UsernameCandidate = await UserModel.findOne({username})
-    if (UsernameCandidate) {
-      throw ApiError.BadRequest(`Пользователь с именем ${username} уже существует`);
-    }
-    const PasswordCandidate = await UserModel.findOne({email})
-    if (PasswordCandidate) {
-      throw ApiError.BadRequest(`Пользователь с почтовым адресом ${email} уже существует`);
+    const EmailCandidate = await UserModel.findOne({email})
+    if (EmailCandidate) {
+      throw ApiError.BadRequest(`Email is already taken: ${email}`);
     }
     const hashPassword = await BCRYPT.hash(password, 3); // пароль + соль, что такое соль?
     const activationLink = UUID.v4();
-    const user = await UserModel.create({username, email, password: hashPassword, activationLink});
+    const userIconId = Math.floor(Math.random() * 11);
+    const user = await UserModel.create({username, email, password: hashPassword, activationLink, userIconId});
     // await MAIL_SERVICE.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);
 
-    const userDto = new UserDto(user); // id, username, email, isActivated
+    const userDto = new UserDto(user); // id, username, email, isActivated, icon, favorites, playlists
     const tokens = tokenService.generateTokens({...userDto});
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
 
@@ -31,24 +28,24 @@ class UserService {
   async activate(activationLink) {
     const user = await UserModel.findOne({activationLink})
     if (!user) {
-      throw ApiError.BadRequest('Некорректная ссылка активации');
+      throw ApiError.BadRequest('Incorrect activation link');
     }
     user.isActivated = true;
     await user.save();
   }
 
-  async login (username, email, password) {
-    const user = await UserModel.findOne({username})
+  async login (email, password) {
+    // const user = await UserModel.findOne({username})
+    // if (!user) {
+    //   throw ApiError.BadRequest('Пользователь с таким именем не найден');
+    // }
+    const user = await UserModel.findOne({email})
     if (!user) {
-      throw ApiError.BadRequest('Пользователь с таким именем не найден');
-    }
-    const pass = await UserModel.findOne({email})
-    if (!pass) {
-      throw ApiError.BadRequest('Пользователь с таким email не найден');
+      throw ApiError.BadRequest('Incorrect email');
     }
     const isPassEquals = await BCRYPT.compare(password, user.password);
     if (!isPassEquals) {
-      throw ApiError.BadRequest('Неверный пароль');
+      throw ApiError.BadRequest('Incorrect password');
     }
     const userDto = new UserDto(user);
     const tokens = tokenService.generateTokens({...userDto});
