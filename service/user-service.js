@@ -16,7 +16,7 @@ class UserService {
     const activationLink = UUID.v4();
     const userIconId = Math.floor(Math.random() * 11);
     const user = await UserModel.create({username, email, password: hashPassword, activationLink, userIconId});
-    // await MAIL_SERVICE.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);
+    await MAIL_SERVICE.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);
 
     const userDto = new UserDto(user); // id, username, email, isActivated, icon, favorites, playlists
     const tokens = tokenService.generateTokens({...userDto});
