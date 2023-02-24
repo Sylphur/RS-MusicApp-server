@@ -14,4 +14,4 @@ How to use:
  - dont worry about CORS - app will automatically send preflight responces with copy of yours preflight headers
  
  How not to use:
-  - avoid using it with *http://* because app can set and read cookies - it will be blocked by any browser permissons. Use localhost or *https://*  deploy
+  - avoid using it with *http://* because app can set and read cookies - it will be blocked by any browser by permissons. Use localhost or *https://*  deploy
