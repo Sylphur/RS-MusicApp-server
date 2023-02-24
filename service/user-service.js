@@ -80,6 +80,47 @@ class UserService {
     const users = await UserModel.find();
     return users;
   }
+
+  async changeAccountSettings(email, username, userIconId) {
+    const user = await UserModel.findOne({email})
+    if (!user) {
+      throw ApiError.BadRequest('Incorrect email');
+    }
+    user.username = username;
+    user.userIconId = userIconId;
+    await user.save();
+    return user;
+  }
+
+  async accountSetter(refreshToken, changedUser) {
+    if (!refreshToken) {
+      throw ApiError.UnauthorizedError();
+    }
+    const userData = tokenService.validateRefreshToken(refreshToken);
+    const tokenFromDb = await tokenService.findToken(refreshToken);
+    if (!userData || !tokenFromDb) {
+      throw ApiError.UnauthorizedError();
+    }
+    const user = await UserModel.findById(userData.id); 
+     console.log("Taken user: ", changedUser);
+      console.log('Object to change ', user)
+      user.username = changedUser.username;
+      user.userIconId = changedUser.userIconId;
+      user.userFavorites = changedUser.userFavorites;
+      user.customPlaylists = changedUser.customPlaylists;
+      console.log('Object to save: ', user);
+    await user.save();
+    return user;
+  }
+
+  async getUser(refreshToken) {
+    if (!refreshToken) {
+      return {};
+    }
+    const userData = tokenService.validateRefreshToken(refreshToken);
+    const user = await UserModel.findById(userData.id); 
+    return user;
+  }
 }
 
 module.exports = new UserService();

@@ -69,6 +69,45 @@ class UserController {
       next(e);
     }
   }
+
+  async changeAccountSettings(req, res, next) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return next(ApiError.BadRequest('Validation error', errors.array()))
+      }
+      const {email, username, userIconId} = req.body;
+      const userData = await userService.changeAccountSettings(email, username, userIconId);
+      return res.json(userData);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async accountSetter(req, res, next) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return next(ApiError.BadRequest('Validation error', errors.array()))
+      }
+      const {refreshToken} = req.cookies;
+      const {changedUser} = req.body;
+      const userData = await userService.accountSetter(refreshToken, changedUser);
+      return res.json(userData);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async getUser(req, res, next) {
+    try {
+      const {refreshToken} = req.cookies;
+      const userData = await userService.getUser(refreshToken);
+      return res.json(userData);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 
