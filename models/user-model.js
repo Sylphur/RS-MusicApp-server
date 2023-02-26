@@ -12,7 +12,7 @@ const UserSchema = new Schema({
     albums: {type: [Number], default: []},
     artists: {type: [Number], default: []},
     playlists: {type: [Number], default: []},
-    podcasts: {type: [Number], default: []},
+    radio: {type: [Number], default: []},
   },
   customPlaylists: {type: [{
     playlistName: {type: String},
