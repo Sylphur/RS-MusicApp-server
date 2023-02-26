@@ -6,7 +6,7 @@ class MailService {
     this.transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: process.env.SMTP_PORT,
-      secure: false,
+      secure: true,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD
@@ -16,8 +16,8 @@ class MailService {
   async sendActivationMail(emailto, link) {
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
-      emailto,
-      subject: `Активация аккаунта на ${process.env.API_URL}`,
+      to: emailto,
+      subject: `Активация аккаунта в RS Music App (${process.env.CLIENT_URL})`,
       text: '',
       html: 
       `
