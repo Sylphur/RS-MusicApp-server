@@ -15,8 +15,15 @@ const UserSchema = new Schema({
     radio: {type: [Number], default: []},
   },
   customPlaylists: {type: [{
-    playlistName: {type: String},
-    playlistTracks: {type: [Number]}
+    id: {type: String},
+    title: {type: String},
+    creator: {
+      name: {type: String}
+    },
+    tracks: {
+      data: {type: [Number]}
+    },
+    nb_tracks: {type: Number},
   }], default: []}
 })
 
