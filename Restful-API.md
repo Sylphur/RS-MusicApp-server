@@ -215,9 +215,7 @@ cookie: {
   userIconId ,
   userFavorites,
   customPlaylists,
-  },
-  accessToken,
-  refreshToken;  //set at cookie 
+  }
 }
 ```
 - No/invalid refresh token: 
