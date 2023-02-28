@@ -44,7 +44,7 @@ class UserController {
     try {
       const activationLink = req.params.link;
       await userService.activate(activationLink);
-      return res.redirect(process.env.CLIENT_URL); //сюда сунуть адрес фронтенда
+      return res.redirect(process.env.DEPLOY_URL); //сюда сунуть адрес фронтенда
     } catch (e) {
       next(e);
     }
