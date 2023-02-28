@@ -1,6 +1,7 @@
 # RS-MusicApp-server
 Backend server created for https://github.com/DashaErmolich/rs-clone  
 Database [mongodb] - https://cloud.mongodb.com/v2/63e118c313c97e5c75b99d81#/metrics/replicaSet/63e1194e57877e74d2b480f6/explorer/test/  
+Restful API docs - https://github.com/Sylphur/RS-MusicApp-server/blob/main/Restful-API.md  
 Language - Node.js (node express)
 
 Features:
