@@ -271,7 +271,6 @@ cookie: {
 - body: 
 ```js
 //interface-like object from store component who contains userFavorites and customPlaylists we want to set.
-//near impossible to test it via postman
 {
   {
     username,
