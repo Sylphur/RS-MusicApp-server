@@ -196,6 +196,9 @@ Errors:
 ```js
 cookie: {
 "refreshToken": "string"
+},
+Authorization: {
+"token": "Bearer accessToken"
 }
 ```
 <details>  
@@ -224,8 +227,14 @@ cookie: {
 </details>  
 
 ### Setter: account settings
-*Method for changing icon and username. No token checking => need email to find corresponding user*
+*Method for changing icon and username. Need email to bind to corresponding user*
 - `POST` /api/settings
+- header: 
+```js
+Authorization: {
+"token": "Bearer accessToken"
+}
+```
 - body: 
 ```js
 {
@@ -260,10 +269,13 @@ Errors:
 
 ### Setter: user favorites, custom playlists
 *Method to save most sensitive (because it not our) data. Authorization, validation, database identical checks. Require an object of the relevant interface, near impossible to test it via postman.*  
-*Also it can be used to set username and icon id, but there is no point of it. Сhanging the other fields will ignored or may result in an error*
+*Also it can be used to set username and icon id, but there is no point of it. Changes the other fields will ignored or may result in an error*
 - `POST` /api/setter
 - header: 
 ```js
+Authorization: {
+"token": "Bearer accessToken"
+},
 cookie: {
 "refreshToken": "string"
 }
