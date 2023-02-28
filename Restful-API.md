@@ -194,11 +194,11 @@ Errors:
 - `GET` /api/user
 - header: 
 ```js
-cookie: {
-"refreshToken": "string"
-},
 Authorization: {
 "token": "Bearer accessToken"
+},
+cookie: {
+"refreshToken": "string"
 }
 ```
 <details>  
